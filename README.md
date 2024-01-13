@@ -13,7 +13,7 @@
 
 ## Description
 
-[NestJS](https://github.com/nestjs/nest) Boilerplate made with ❤️ by [💡VivifyIdeas💡](https://www.vivifyideas.com).
+[NestJS](https://github.com/nestjs/nest) Boilerplate was based on the boilerplate projects provided by NestJS.
 
 ## Start Guide
 
@@ -21,8 +21,8 @@
 
 - Create .env file `cp .env.example .env` and replace existing env variables
   (mysql/mariadb connection params)
-- Install dependencies `yarn`
-- Start the app `yarn start` (app will be exposed through the port 3000)
+- Install dependencies `npm`
+- Start the app `npm i` (app will be exposed through the port 3000)
 
 ### Inside Docker containers
 
@@ -33,7 +33,7 @@ $ ./init
 It will setup the project for you (starting docker-compose stack, running migrations).
 The NestJS app running in dev mode will be exposed on `http://localhost` (port 80)
 
-For IDE autocompletion to work, run `yarn` on the host machine.
+For IDE autocompletion to work, run `npm` on the host machine.
 
 ## TypeORM integrated
 
@@ -49,30 +49,30 @@ If you don't work on a production-ready project you can always change `DB_SYNC` 
 ### Create Migration
 Creating new migration is relatively easy and you can use typeorm CLI for that. You can run this command to create new migration:
 ```bash
-$ docker exec -it nest yarn migration:create -n {CreateTableUsers}
+$ docker exec -it nest npm migration:create -n {CreateTableUsers}
 ```
 Migration file will be placed under `src/migrations`. For more details check the existing [1611484925515-CreateUsersTable.ts](src/migrations/1611484925515-CreateUsersTable.ts)
 
 ### Run Migrations
 ```bash
-$ docker exec -it nest yarn migration:run
+$ docker exec -it nest npm migration:run
 ```
 ### Revert Migrations
 ```bash
-$ docker exec -it nest yarn migration:revert
+$ docker exec -it nest npm migration:revert
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ docker exec -it nest yarn test
+$ docker exec -it nest npm test
 
 # e2e tests
-$ docker exec -it nest yarn test:e2e
+$ docker exec -it nest npm test:e2e
 
 # test coverage
-$ docker exec -it nest yarn test:cov
+$ docker exec -it nest npm test:cov
 ```
 
 ## Environment Configuration
