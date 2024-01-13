@@ -1,0 +1,36 @@
+version: "2"
+services:
+  nestjs-boilerplate:
+    build: .
+    container_name: nestjs-boilerplate
+    depends_on:
+      connector-ms-name-postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: connector_ms_name_postgres
+      DB_PORT: 5432
+      DB_NAME: connector_ms_name
+      DB_USERNAME: connector_ms-name_user
+      DB_PASSWORD: connector_ms-name_password
+      APP_PORT: 8080
+    volumes:
+      - ./src:/app/src
+      - .env:/app/.env
+
+  connector-ms-name-postgres:
+    image: postgres
+    container_name: connector_ms_name_postgres
+    environment:
+      POSTGRES_USER: connector_ms_name_user
+      POSTGRES_DB: connector_ms_name
+      POSTGRES_PASSWORD: connector_ms_name_password
+      POSTGRES_HOST_AUTH_METHOD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U connector_ms_name_user -d connector_ms_name" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
