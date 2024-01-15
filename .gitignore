@@ -4,6 +4,9 @@ node_modules/
 # IDE
 /.vscode
 
+# Intellij
+.idea/
+
 # misc
 .DS_Store
 lerna-debug.log
