@@ -5,12 +5,26 @@ export class LoginRequest {
   @ApiProperty({
     required: true,
   })
-  @IsEmail()
-  email: string;
+  username: string;
+
   @ApiProperty({
     required: true,
   })
   @IsNotEmpty()
-  @MinLength(5)
   password: string;
+
+  @ApiProperty({
+    required: true,
+  })
+  client_id: string;
+
+  @ApiProperty({
+    required: true,
+  })
+  client_secret: string;
+
+  @ApiProperty({
+    required: true,
+  })
+  grant_type: string;
 }

@@ -4,14 +4,21 @@ import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '../config';
 import { UserModule } from '../user';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
+import { KeyCloakModule } from '../keycloak/keycloak.module';
+import { HttpModule } from '@nestjs/axios';
+import { KeyCloakAuthGuard } from './jwt-guard';
 
 
 @Module({
   imports: [
     UserModule,
     ConfigModule,
+    HttpModule.register({
+      timeout: 5000,
+      maxRedirects: 5,
+    }),
+    KeyCloakModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -31,8 +38,12 @@ import { AuthController } from './auth.controller';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [PassportModule.register({ defaultStrategy: 'jwt' })],
+  providers: [AuthService, KeyCloakAuthGuard],
+  exports: [
+    AuthService,
+    KeyCloakAuthGuard,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+  ],
 })
 export class AuthModule {
 }

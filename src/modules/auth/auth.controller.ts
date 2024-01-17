@@ -1,34 +1,37 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService, LoginRequest } from './';
 import { CurrentUser } from '../common/decorator/current-user.decorator';
 import { User } from '../user';
 import { LoginResponse } from './login.response';
+import { Public } from 'nest-keycloak-connect';
+import { IsAuth } from './is.auth.decorator';
 
 @Controller('auth')
-@ApiTags('authentication')
+@ApiTags('01 - Autenticação')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
   ) {
   }
 
-  @Post()
+  @IsAuth()
+  @Public()
+  @Post('/token')
+  @ApiConsumes("application/x-www-form-urlencoded")
   @ApiResponse({ status: 201, description: 'Successful Login' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async login(@Body() payload: LoginRequest): Promise<LoginResponse> {
-    const user = await this.authService.validateUser(payload);
-    return await this.authService.createToken(user);
+  async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
+      return await this.authService.generateAccessToken(loginRequest);
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard())
-  @Get('me')
+  @Get('test')
   @ApiResponse({ status: 200, description: 'Successful Response' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getLoggedInUser(@CurrentUser() user: User): Promise<User> {
-    return user;
+  async getLoggedInUser(): Promise<string> {
+    return "your token is valid";
   }
 }
