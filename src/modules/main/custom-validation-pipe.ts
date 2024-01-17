@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
-import { ApiErrorDTO } from '../../errors/domain/api-error.dto';
-import { Errors } from '../../errors/domain/errors.enum';
-import { ApiRuntimeException } from '../../errors/api-runtime-exception';
+import { ApiErrorDTO } from '../errors/domain/api-error.dto';
+import { Errors } from '../errors/domain/errors.enum';
+import { ApiRuntimeException } from '../errors/api-runtime-exception';
 
 @Injectable()
 export class CustomValidationPipe extends ValidationPipe {

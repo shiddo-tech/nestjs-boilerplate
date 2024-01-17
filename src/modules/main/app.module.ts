@@ -9,10 +9,12 @@ import { KeyCloakModule } from '../keycloak/keycloak.module';
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { HttpInterceptor } from '../../interceptor/http.interceptor';
 import { CustomValidationPipe } from './custom-validation-pipe';
+import { TestModule } from '../test/test.module';
 
 @Module({
   imports: [
     KeyCloakModule,
+    TestModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

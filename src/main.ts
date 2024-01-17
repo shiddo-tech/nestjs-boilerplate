@@ -1,9 +1,10 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestApplication, NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestApplication, NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { TrimStringsPipe } from './modules/common/transformer/trim-strings.pipe';
 import { AppModule } from './modules/main/app.module';
 import { setupSwagger } from './swagger';
+import { PrismaExceptionFilter } from './adapter/prisma.exception.filter';
 
 const logger: Logger = new Logger();
 
@@ -15,6 +16,8 @@ async function bootstrap(): Promise<void> {
   setupSwagger(app);
   app.enableCors();
   app.useGlobalPipes(new TrimStringsPipe(), new ValidationPipe());
+  //const { httpAdapter } = app.get(HttpAdapterHost)
+  //app.useGlobalFilters(new PrismaExceptionFilter(httpAdapter))
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
@@ -25,4 +28,4 @@ async function bootstrap(): Promise<void> {
   logger.log(`NestJS initialized with port(s): ${port} (http)`);
 }
 
-bootstrap().catch((error) => logger.log(error));
+bootstrap();

@@ -1,6 +1,6 @@
 import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service';
+import { AuthService } from '../service/auth.service';
 import { UnauthorizedError } from '../../errors/unauthorized.error';
 
 @Injectable()
@@ -14,11 +14,12 @@ export class KeyCloakAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if(context.getHandler().name === 'login') {
-      return true;
+    if(!context || !context.switchToHttp() || !context.switchToHttp().getRequest()) {
+      this.logger.error('fail to validate request data validation');
+      return false;
     }
     const req = context.switchToHttp().getRequest();
-    if (!req.headers?.authorization) {
+    if (!req?.headers?.authorization) {
       this.logger.error('authorization header is required');
 
       throw new UnauthorizedError
@@ -34,9 +35,7 @@ export class KeyCloakAuthGuard extends AuthGuard('jwt') {
         '\u00e9 obrigat\u00f3rio informar o atributo bearer auth no header da requisi\u00e7\u00e3o');
     }
 
-    const x = await this.authService.validateAccessToken(authorization.replace(/^Bearer\s/, ''));
-
-    return x;
+    return await this.authService.validateAccessToken(authorization.replace(/^Bearer\s/, ''));
   }
 
 

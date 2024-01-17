@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '../config';
-import { UserModule } from '../user';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+import { AuthService } from './service/auth.service';
 import { KeyCloakModule } from '../keycloak/keycloak.module';
 import { HttpModule } from '@nestjs/axios';
-import { KeyCloakAuthGuard } from './jwt-guard';
+import { KeyCloakAuthGuard } from './guard/jwt-guard';
+import { KeycloakConnectModule, KeycloakConnectOptions } from 'nest-keycloak-connect';
+import { PassportModule } from '@nestjs/passport';
 
 
 @Module({
   imports: [
-    UserModule,
     ConfigModule,
     HttpModule.register({
       timeout: 5000,
@@ -20,24 +17,20 @@ import { KeyCloakAuthGuard } from './jwt-guard';
     }),
     KeyCloakModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.registerAsync({
+    KeycloakConnectModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        return {
-          secret: configService.get('JWT_SECRET_KEY'),
-          signOptions: {
-            ...(configService.get('JWT_EXPIRATION_TIME')
-              ? {
-                expiresIn: Number(configService.get('JWT_EXPIRATION_TIME')),
-              }
-              : {}),
-          },
-        };
-      },
       inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        return {
+          authServerUrl: config.get('KEYCLOAK_AUTH_SERVER_URL'),
+          realm: config.get('KEYCLOAK_REALM'),
+          clientId: config.get('KEYCLOAK_CLIENT_ID'),
+          secret: config.get('KEYCLOAK_CLIENT_SECRET'),
+        } as KeycloakConnectOptions;
+      },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [],
   providers: [AuthService, KeyCloakAuthGuard],
   exports: [
     AuthService,
