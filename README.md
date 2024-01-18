@@ -1,79 +1,38 @@
-<h1>NestJS Boilerplate
-  <a
-    href="http://nestjs.com/"
-    target="blank"
-  >
-    <img
-      src="https://nestjs.com/img/logo_text.svg"
-      width="65"
-      alt="Nest Logo"
-    />
+<h1 align="center">NestJS Boilerplate</h1>
+
+<p align="center">
+  <a href="http://nestjs.com/" target="blank">
+    <img src="https://nestjs.com/img/logo_text.svg" width="65" alt="Nest Logo" />
   </a>
-</h1>
+</p>
 
 ## Description
 
-[NestJS](https://github.com/nestjs/nest) Boilerplate was based on the boilerplate projects provided by NestJS.
+[NestJS](https://github.com/nestjs/nest) Boilerplate is a project based on the boilerplate projects provided by NestJS, enhanced with authentication using Keycloak auth server.
 
-## Start Guide
+## Getting Started
 
-### Outside Docker containers
+### Running Outside Docker Containers
 
-- Create .env file `cp .env.example .env` and replace existing env variables
-  (mysql/mariadb connection params)
-- Install dependencies `npm`
-- Start the app `npm i` (app will be exposed through the port 3000)
+1. Create a .env file by copying the example: `cp .env.example .env` and replace the existing environment variables (MySQL/MariaDB connection parameters).
+2. Install dependencies: `npm install`
+3. Start the app: `npm start` (the app will be exposed through port 3000)
 
-### Inside Docker containers
+### Running Inside Docker Containers
 
-Just run already prepared bash script:
+Note: The Dockerfile and docker-compose are not ready. To use, the init file needs to be configured before running:
+
 ```bash
 $ ./init
 ```
-It will setup the project for you (starting docker-compose stack, running migrations).
-The NestJS app running in dev mode will be exposed on `http://localhost` (port 80)
-
-For IDE autocompletion to work, run `npm` on the host machine.
 
 ## TypeORM integrated
 
-[TypeORM](http://typeorm.io/) gives you possibility to use next db types:
-`mysql`, `postgres`, `mariadb`, `sqlite`, etc. Please look at docs for more details.
-The `docker-compose` template uses `mariadb`.
-## Migrations
+This project is configured with [TypeORM](http://typeorm.io/) for PostgreSQL, though no entities have been created yet.
 
-If you don't work on a production-ready project you can always change `DB_SYNC` env variable to true so you can play with NestJS without the need to write actual migrations.
-
-**`synchronize: true` shouldn't be used in production - otherwise, you can lose production data.**
-
-### Create Migration
-Creating new migration is relatively easy and you can use typeorm CLI for that. You can run this command to create new migration:
-```bash
-$ docker exec -it nest npm migration:create -n {CreateTableUsers}
-```
-Migration file will be placed under `src/migrations`. For more details check the existing [1611484925515-CreateUsersTable.ts](src/migrations/1611484925515-CreateUsersTable.ts)
-
-### Run Migrations
-```bash
-$ docker exec -it nest npm migration:run
-```
-### Revert Migrations
-```bash
-$ docker exec -it nest npm migration:revert
-```
-
-## Test
-
-```bash
-# unit tests
-$ docker exec -it nest npm test
-
-# e2e tests
-$ docker exec -it nest npm test:e2e
-
-# test coverage
-$ docker exec -it nest npm test:cov
-```
+Migrations
+No entities or migrations have been implemented in this project.
+Snake_case naming convention is used for creating tables and columns.
 
 ## Environment Configuration
 
@@ -85,9 +44,22 @@ and read all environment variables from `.env` file, which is created automatica
 RESTful APIs you can describe with already integrated Swagger.
 To see all available endpoints visit http://localhost/api/docs
 
-## Authentication - JWT
+## Authentication - Keycloak
 
-Already preconfigured JWT authentication.
-It's suggested to change current password hashing to something more secure.
-You can start use already working implementation of `Login` and `Registration`
-endpoints, just take a look at [http://localhost/api/docs](http://localhost/api/docs).
+JWT authentication is preconfigured. Obtain the access token from the Keycloak endpoint to include in your requests.
+
+## Microservices Best Practices
+
+The project emphasizes several key aspects crucial for the structure of microservices:
+
+1. **Maintaining Clean Code:** Prioritizing the use of best practices and design principles to ensure code cleanliness and readability.
+
+2. **Proper HTTP Method Usage:** Adhering to appropriate HTTP methods for effective communication between services.
+
+3. **Clear Error Messages:** Ensuring error messages are clear and follow the defined error handling pattern in the application. This involves using the `ApiRuntimeException` class, creating exception classes that extend `ApiRuntimeException`, and incorporating the `ApiErrorDTO` class to provide detailed error information.
+
+4. **Swagger Configuration:** Properly configuring Swagger for documenting and visualizing RESTful APIs.
+
+5. **Structured Parameters and Returns:** All parameters and return values should have a representative class, avoiding the use of the `any` type.
+
+6. **Module-specific DTO/Wrapper:** Each module should have its own DTO/Wrapper to facilitate interactions with other modules.
