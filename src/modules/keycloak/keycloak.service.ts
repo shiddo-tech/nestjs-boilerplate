@@ -2,13 +2,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { KeycloakDto } from './keycloak.dto';
 import { catchError, map } from 'rxjs/operators';
-import { AxiosError } from 'axios';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, throwError } from 'rxjs';
+import { UnauthorizedException } from '../errors/auth/unauthorized.exception';
 
 @Injectable()
-export class KeycloakConfigService {
+export class KeycloakService {
 
-  private readonly logger = new Logger(KeycloakConfigService.name);
+  private readonly logger = new Logger(KeycloakService.name);
 
   constructor(
     private readonly http: HttpService,
@@ -30,14 +30,13 @@ export class KeycloakConfigService {
           return res?.data?.active;
         }),
       ).pipe(
-        catchError((error: AxiosError) => {
-          this.logger.error(error.response.data);
-          throw 'an error occur when trying to find a user';
+        catchError(err => {
+          this.logger.error(err.response.data);
+          return throwError(() => new UnauthorizedException());
         }),
       );
 
     return await firstValueFrom(keycloakObservable);
   }
-
 
 }

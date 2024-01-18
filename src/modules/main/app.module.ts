@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
-import { AuthModule, KeyCloakAuthGuard } from '../auth';
 import { CommonModule } from '../common';
 import { ConfigModule, ConfigService } from '../config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { KeyCloakModule } from '../keycloak/keycloak.module';
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { HttpInterceptor } from '../../interceptor/http.interceptor';
 import { CustomValidationPipe } from './custom-validation-pipe';
 import { TestModule } from '../test/test.module';
+import { KeyCloakGuard } from '../keycloak/keycloak.guard';
 
 @Module({
   imports: [
@@ -32,12 +30,10 @@ import { TestModule } from '../test/test.module';
       },
     }),
     ConfigModule,
-    AuthModule,
     CommonModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpInterceptor,
@@ -48,7 +44,7 @@ import { TestModule } from '../test/test.module';
     },
     {
       provide: APP_GUARD,
-      useClass: KeyCloakAuthGuard,
+      useClass: KeyCloakGuard,
     },
   ],
 })
