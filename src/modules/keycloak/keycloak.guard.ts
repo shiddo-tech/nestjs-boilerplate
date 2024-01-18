@@ -18,7 +18,7 @@ export class KeyCloakGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if (!context || !context.switchToHttp() || !context.switchToHttp().getRequest()) {
+    if (!context?.switchToHttp()?.getRequest()) {
       this.logger.error('fail to validate request data validation');
       return false;
     }
