@@ -10,9 +10,9 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { IncomingMessage } from 'http';
-import { ApiErrorDTO } from '../errors/domain/api-error.dto';
-import { Errors } from '../errors/domain/errors.enum';
-import { ApiRuntimeException } from '../errors/api-runtime-exception';
+import { ApiErrorDTO } from '../modules/errors/domain/api-error.dto';
+import { Errors } from '../modules/errors/domain/errors.enum';
+import { ApiRuntimeException } from '../modules/errors/api-runtime-exception';
 import { DebugUtil } from '../utils/debug.util';
 
 @Injectable()
