@@ -4,6 +4,7 @@ import { useContainer } from 'class-validator';
 import { TrimStringsPipe } from './modules/common/transformer/trim-strings.pipe';
 import { AppModule } from './modules/main/app.module';
 import { setupSwagger } from './swagger';
+import { ConfigModule, ConfigService } from './modules/config';
 
 const logger: Logger = new Logger();
 
@@ -18,7 +19,9 @@ async function bootstrap(): Promise<void> {
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  const port = 3000;
+  const config = app.select(ConfigModule).get(ConfigService);
+
+  const port = config.get("APP_PORT")
 
   await app.listen(port);
 

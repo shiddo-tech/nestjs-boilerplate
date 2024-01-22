@@ -31,7 +31,7 @@ export class KeycloakService {
         }),
       ).pipe(
         catchError(err => {
-          this.logger.error(err.response.data);
+          this.logger.error(err?.response?.data);
           return throwError(() => new UnauthorizedException());
         }),
       );
