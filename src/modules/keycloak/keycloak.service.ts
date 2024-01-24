@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { KeycloakDto } from './keycloak.dto';
 import { catchError, map } from 'rxjs/operators';
 import { firstValueFrom, throwError } from 'rxjs';
-import { UnauthorizedException } from '../errors/auth/unauthorized.exception';
+import { UnexpectedErrorException } from '../errors/common/unexpected-error.exception';
 
 @Injectable()
 export class KeycloakService {
@@ -32,7 +32,7 @@ export class KeycloakService {
       ).pipe(
         catchError(err => {
           this.logger.error(err?.response?.data);
-          return throwError(() => new UnauthorizedException());
+          return throwError(() => new UnexpectedErrorException());
         }),
       );
 
