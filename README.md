@@ -14,7 +14,7 @@
 
 ### Running Outside Docker Containers
 
-1. Create a .env file by copying the example: `cp .env.example .env` and replace the existing environment variables (MySQL/MariaDB connection parameters).
+1. Create a .env file by copying the example: `cp .env.example .env` and replace the existing environment variables.
 2. Install dependencies: `npm install`
 3. Start the app: `npm start` (the app will be exposed through port 3000)
 
@@ -54,7 +54,7 @@ The project emphasizes several key aspects crucial for the structure of microser
 
 1. **Maintaining Clean Code:** Prioritizing the use of best practices and design principles to ensure code cleanliness and readability.
 
-2. **Proper HTTP Method Usage:** Adhering to appropriate HTTP methods for effective communication between services.
+2. **Proper HTTP Method and Status Code Usage:** Adhering to appropriate HTTP methods for effective communication between services.
 
 3. **Clear Error Messages:** Ensuring error messages are clear and follow the defined error handling pattern in the application. This involves using the `ApiRuntimeException` class, creating exception classes that extend `ApiRuntimeException`, and incorporating the `ApiErrorDTO` class to provide detailed error information.
 
